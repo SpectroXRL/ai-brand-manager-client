@@ -21,6 +21,23 @@ function App() {
         ux_mode: "popup",
         callback: (response: any) => {
           console.log("Authorization Code:", response.code);
+
+          const backendUrl = import.meta.env.VITE_BACKEND_URL;
+          fetch(backendUrl, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ code: response.code }),
+          })
+            .then((res) => res.json())
+            .then((data) => {
+              console.log("Backend Response:", data);
+              // Handle successful authentication here
+            })
+            .catch((error) => {
+              console.error("Error during authentication:", error);
+            });
         },
       });
       setGoogleClient(client);
